@@ -416,7 +416,7 @@ genomePlot <- function(subsVcf.file, indelsVcf.file, cnvsTab.file, rearrBedpe.fi
     # plot a histogram
     par(fig=c(cPanelWidth+0.74*(1-cPanelWidth),cPanelWidth+.995*(1-cPanelWidth),0.70, 0.95), new=TRUE)
     names(subs.data$passed.hist) <- NA
-    barplot(subs.data$passed.hist , col=c(rep('royalblue',16), rep('black',16), rep('red', 16), rep('grey', 16), rep('green2', 16), rep('hotpink',16)),main=paste(nrow(subs.data$muts),'substitutions'), , border=NA)
+    barplot(subs.data$passed.hist , col=c(rep('royalblue',16), rep('black',16), rep('red', 16), rep('grey', 16), rep('green2', 16), rep('hotpink',16)), main=paste(nrow(subs.data$muts),'substitutions'), las = 1, border=NA)
   }
 
   if (!no_subs_legend) {
@@ -432,17 +432,15 @@ genomePlot <- function(subsVcf.file, indelsVcf.file, cnvsTab.file, rearrBedpe.fi
 
   # indels
   if (exists("indels") && !is.null(indels)) {
-    indel.data <- c( sum(indels$indel.type=='D' & indels$classification == 'Microhomology-mediated'),
-                      sum(indels$indel.type=='D' & indels$classification == 'Repeat-mediated'),
-                      sum(indels$indel.type=='D' & indels$classification == 'None'),
-                      sum(indels$indel.type=='I'),
-                      sum(indels$indel.type=='DI'))
-    #indel.col <- c('firebrick4', 'firebrick1', 'firebrick3', 'darkgreen', 'grey')
-    indel.col <- c(params.my$indel.mhomology, params.my$indel.repeatmediated, params.my$indel.other, params.my$indel.insertion, params.my$indel.complex)
-    indel.lbs <- c('deletion \n m-homology',  'deletion repeat', 'deletion other', 'insertion', 'complex')
+    indel.data <- c(sum(indels$indel.type=='D' & indels$classification == 'Microhomology-mediated'),
+                    sum(indels$indel.type=='D' & indels$classification == 'Repeat-mediated'),
+                    sum(indels$indel.type=='D' & indels$classification == 'None'),
+                    sum(indels$indel.type=='I'))
+    indel.col <- c(params.my$indel.mhomology, params.my$indel.repeatmediated, params.my$indel.other, params.my$indel.insertion)
+    indel.lbs <- c('Deletion\nmicrohomology',  'Deletion\nrepeat-mediated', 'Deletion\nother', 'Insertion')
     mp <- barplot(indel.data, main=paste(nrow(indels), 'deletions and insertions'), axes = FALSE, col=indel.col, axisnames = FALSE, width=1 , horiz=TRUE, border=NA)
     axis(2, at = mp, las=2,  labels = indel.lbs, col='grey', tick=FALSE, cex=0.5)
-    axis(1, las=2, col='grey')
+    axis(1, las=1, col='grey')
   }
 
   # copy number
@@ -463,10 +461,10 @@ genomePlot <- function(subsVcf.file, indelsVcf.file, cnvsTab.file, rearrBedpe.fi
     rearrs.bar <- c(sum(rearrs.formatted$pf==32), sum(rearrs.formatted$pf==1)+sum(rearrs.formatted$pf==8), sum(rearrs.formatted$pf==2), sum(rearrs.formatted$pf==4))
 
     rearrs.col <- c(transloc.colour, inv.col, del.col, dupl.col)
-    rearrs.lbs <- c('translocation',  'inversion', 'deletion', 't. duplication')
+    rearrs.lbs <- c('Translocation',  'Inversion', 'Deletion', 'Tandem\nduplication')
     mp <- barplot(rearrs.bar, main=paste(nrow(rearrs.formatted), 'rearrangements'), axes = FALSE, col=rearrs.col, axisnames = FALSE, width=1, horiz=TRUE, border=NA)
     axis(2, at = mp[rearrs.bar>0], las=2,  labels =rearrs.lbs[rearrs.bar>0], col='grey', tick=FALSE, cex=0.5)
-    axis(1, las=2, col='grey')
+    axis(1, las=1, col='grey')
   }
 
   dev.off();
