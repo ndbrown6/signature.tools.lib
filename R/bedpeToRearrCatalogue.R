@@ -45,9 +45,9 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
 
   clusters_table <- NULL
 	
-  if(nrow(sv_bedpe)>0){
+  if(nrow(sv_bedpe)>0) {
     # make sure that there are no multiple samples here
-    if(length(unique(sv_bedpe$sample))>1){
+    if(length(unique(sv_bedpe$sample))>1) {
       # keep only the most frequent sample
       tmpsamplenames <- unique(sv_bedpe$sample)
       tmpcounts <- table(sv_bedpe$sample)
@@ -59,6 +59,9 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
               "This fix should work if there are a few rearrangements from the germline sample, so all we would do is to remove the germline sample name and variants ",
               "while keeping all the tumour sample variants.")
     }
+     samplechoice <- unique(sv_bedpe$sample) 
+  } else {
+     samplechoice <- NULL	  
   }
   
   #Annotate the bedpe if necessary
