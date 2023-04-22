@@ -43,8 +43,7 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
     stop("[error bedpeToRearrCatalogue] missing columns in subs data frame, following columns required: chrom1, start1, end1, chrom2, start2, end2 and sample. In addition either svclass or strand1 and strand2. Check ?bedpeToRearrCatalogue for details.")
   }
 
-  clusters_table <- NULL 
-  samplechoice <- unique(sv_bedpe$sample)[1]
+  clusters_table <- NULL
 	
   if(nrow(sv_bedpe)>0){
     # make sure that there are no multiple samples here
