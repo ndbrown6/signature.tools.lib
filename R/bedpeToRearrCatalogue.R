@@ -43,8 +43,9 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
     stop("[error bedpeToRearrCatalogue] missing columns in subs data frame, following columns required: chrom1, start1, end1, chrom2, start2, end2 and sample. In addition either svclass or strand1 and strand2. Check ?bedpeToRearrCatalogue for details.")
   }
 
-  clusters_table <- NULL
-  
+  clusters_table <- NULL 
+  samplechoice <- unique(sv_bedpe$sample)[1]
+	
   if(nrow(sv_bedpe)>0){
     # make sure that there are no multiple samples here
     if(length(unique(sv_bedpe$sample))>1){
@@ -62,7 +63,7 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
   }
   
   #Annotate the bedpe if necessary
-  if(nrow(sv_bedpe)>0){
+  if(nrow(sv_bedpe)>0) {
     
     #check whether column svclass is present,
     #if not, compute it
@@ -86,19 +87,21 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
       all_sv_annotated[!toberemoved,"FILTER"] <- "PASS"
       sv_bedpe <- sv_bedpe[!toberemoved,]
     }
-    
-    # now cluster
-    clustering.result <- rearrangement.clustering_bedpe(sv_bedpe,
-                                                        plot.path = NA,
-                                                        kmin=kmin,
-                                                        kmin.samples=1,
-                                                        gamma.sdev=25,
-                                                        PEAK.FACTOR=PEAK.FACTOR,
-                                                        thresh.dist=NA)
-    sv_bedpe <- clustering.result$sv_bedpe
-    clustering_regions <- clustering.result$clustering_regions
-
-  }else{
+    if (nrow(sv_bedpe)>0) {
+     clustering.result <- rearrangement.clustering_bedpe(sv_bedpe,
+ 							 plot.path = NA,
+							 kmin=kmin,
+							 kmin.samples=1,
+							 gamma.sdev=25,
+							 PEAK.FACTOR=PEAK.FACTOR,
+							 thresh.dist=NA)
+     sv_bedpe <- clustering.result$sv_bedpe
+     clustering_regions <- clustering.result$clustering_regions
+    } else {
+	all_sv_annotated <- NULL
+	clustering_regions <- NULL
+    }
+  } else {
     all_sv_annotated <- NULL
     clustering_regions <- NULL
   }
@@ -110,7 +113,7 @@ bedpeToRearrCatalogue <- function(sv_bedpe,
 
   # get the junctions catalogue too (this takes care of the 0 SVs case)
   junctions_catalogue <- build_junctions_catalogue(sv_bedpe)
-  if(!is.null(junctions_catalogue)) colnames(junctions_catalogue) <- colnames(rearr_catalogue)
+  if(!is.null(junctions_catalogue)) colnames(junctions_catalogue) <- colnames(rearr_catalogue) <- samplechoice
   
   if(nrow(sv_bedpe)>0){
     annotated_bedpe <- sv_bedpe
