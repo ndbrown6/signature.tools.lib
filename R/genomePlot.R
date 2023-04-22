@@ -463,7 +463,7 @@ genomePlot <- function(subsVcf.file, indelsVcf.file, cnvsTab.file, rearrBedpe.fi
     rearrs.col <- c(transloc.colour, inv.col, del.col, dupl.col)
     rearrs.lbs <- c('Translocation',  'Inversion', 'Deletion', 'Tandem\nduplication')
     mp <- barplot(rearrs.bar, main=paste(nrow(rearrs.formatted), 'rearrangements'), axes = FALSE, col=rearrs.col, axisnames = FALSE, width=1, horiz=TRUE, border=NA)
-    axis(2, at = mp[rearrs.bar>0], las=2,  labels =rearrs.lbs[rearrs.bar>0], col='grey', tick=FALSE, cex=0.5)
+    axis(2, at = mp, las=2,  labels =rearrs.lbs, col='grey', tick=FALSE, cex=0.5)
     axis(1, las=1, col='grey')
   }
 
